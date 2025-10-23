@@ -1,0 +1,58 @@
+# ==============================================================================
+# QuantumLeap CI 워크플로우 가이드 (ci.yml)
+# ==============================================================================
+#
+# ## 목적 ##
+# 이 파일은 대상 프로젝트(예: SKB-IPL-API)의 CI 파이프라인에 QuantumLeap를 통합하여,
+# Pull Request 생성 시 자동으로 테스트를 최적화하는 방법을 안내합니다.
+#
+
+# 1. 워크플로우 실행 조건 (Trigger)
+# main 브랜치로 향하는 Pull Request가 생성되거나 업데이트될 때 실행됩니다.
+on:
+  pull_request:
+    branches: [ main ]
+
+# 2. 수행할 작업(Job) 목록
+jobs:
+  # 작업의 이름 (예: build-and-analyze)
+  build_and_analyze:
+    # 3. 작업이 실행될 환경
+    # 최신 버전의 Ubuntu 가상 머신에서 실행됩니다.
+    runs-on: ubuntu-latest
+
+    # 4. 작업의 단계(Step) 목록
+    steps:
+      # Step 1: 소스 코드 체크아웃
+      # GitHub Actions의 기본 제공 액션을 사용하여 우리 프로젝트 코드를 가상 머신으로 가져옵니다.
+      - name: 1. Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: JDK 17 설정
+      # 분석기를 빌드하고 실행하기 위해 Java(JDK) 환경을 설정합니다.
+      - name: 2. Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle' # Gradle 의존성을 캐싱하여 다음 실행 속도를 높입니다.
+
+      # Step 3: gradlew 실행 권한 부여
+      # Linux/Mac 환경에서 gradlew를 실행하기 위해 필요한 권한을 부여합니다.
+      - name: 3. Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Step 4: QuantumLeap 분석기 빌드
+      # Gradle을 사용하여 우리 프로젝트를 실행 가능한 JAR 파일로 빌드합니다.
+      - name: 4. Build QuantumLeap Analyzer with Gradle
+        run: ./gradlew build
+
+      # Step 5: QuantumLeap 분석기 실행 (개념 증명)
+      # 빌드된 JAR 파일이 CI 환경에서 정상적으로 실행되는지 확인합니다.
+      # 현재는 하드코딩된 경로를 사용하지만, 이 단계가 성공하면 다음 스텝에서 실제 프로젝트를 분석하도록 만듭니다.
+      - name: 5. Run QuantumLeap Analyzer (Proof of Concept)
+        run: |
+          echo "CI 환경에서 분석기를 실행합니다..."
+          # build/libs/ 폴더에 생성된 JAR 파일을 실행합니다.
+          # Main.java의 하드코딩된 경로 때문에 지금은 오류가 발생하지만, "QuantumLeap 분석기를 시작합니다!" 메시지가 출력되면 성공입니다.
+          java -jar build/libs/QuantumLeap-0.0.1-SNAPSHOT.jar

@@ -1,0 +1,6 @@
+git:
+  url: https://api.github.com
+  key: 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
+openAI:
+  key: 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
+  url: https://api.openai.com/v1/chat/completions
