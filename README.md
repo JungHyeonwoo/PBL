@@ -47,7 +47,7 @@ CI 환경 내에서 QuantumLeap.jar가 실행되어 대상 프로젝트 코드�
 quantumleap-config.yml
 
 # 분석할 프로젝트의 기본 패키지 경로
-projectBasePackage: "com.skb.internatiallineproject"
+projectBasePackage: "com.java.yourPorject"
 
 # 소스 코드 디렉토리 (기본값: src/main/java)
 sourceDirectory: "src/main/java"
