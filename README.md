@@ -18,12 +18,12 @@ QuantumLeap는 이 '기다림의 시간'을 '가치 창출의 시간'으로 되�
 ## ⚙️ 동작 원리 (How it Works)
 QuantumLeap는 GitHub Actions 워크플로우의 한 단계로 실행되는 독립적인 분석 애플리케이션입니다.
 
-graph LR
-A["fa:fa-user-edit<br/>코드 변경 및 PR"] --> B{"fa:fa-github-alt<br/>CI 환경 진입"};
-B --> C["fa:fa-cogs<br/>QuantumLeap<br/>코드 분석 및<br/>테스트 선별"];
-C --> D["fa:fa-play-circle<br/>선별된<br/>테스트 실행"];
-D --> E["fa:fa-comment-dots<br/>결과 리포트<br/>생성 및 게시"];
-E --> F["fa:fa-check-square<br/>프로세스 완료"];
+//graph LR
+//A["fa:fa-user-edit<br/>코드 변경 및 PR"] --> B{"fa:fa-github-alt<br/>CI 환경 진입"};
+//B --> C["fa:fa-cogs<br/>QuantumLeap<br/>코드 분석 및<br/>테스트 선별"];
+//C --> D["fa:fa-play-circle<br/>선별된<br/>테스트 실행"];
+//D --> E["fa:fa-comment-dots<br/>결과 리포트<br/>생성 및 게시"];
+//E --> F["fa:fa-check-square<br/>프로세스 완료"];
 
 개발자가 Pull Request를 생성하면 CI 워크플로우가 트리거됩니다.
 
@@ -37,7 +37,9 @@ CI 환경 내에서 QuantumLeap.jar가 실행되어 대상 프로젝트 코드�
 1. QuantumLeap 빌드
    QuantumLeap 프로젝트를 클론하고, 아래 명령어를 실행하여 실행 가능한 JAR 파일을 빌드합니다.
 
+```
 ./gradlew build
+```
 
 생성된 QuantumLeap-x.x.x.jar 파일은 향후 GitHub Releases를 통해 배포될 예정입니다.
 
