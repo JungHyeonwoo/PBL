@@ -1,8 +1,3 @@
-/*
- * QuantumLeap 프로젝트를 위한 Gradle 빌드 스크립트입니다.
- * 이 파일은 프로젝트에 필요한 라이브러리를 정의하고 빌드 과정을 설정합니다.
- */
-
 // 1. 사용할 플러그인 설정
 plugins {
     id 'java-library'
@@ -73,9 +68,13 @@ jar {
                 'Main-Class': 'com.pbl.quantumleap.Main'
         )
     }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from {
+        configurations.runtimeClasspath
+                .filter { it.exists() }
+                .collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
