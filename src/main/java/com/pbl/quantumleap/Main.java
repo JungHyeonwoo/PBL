@@ -2,6 +2,7 @@ package com.pbl.quantumleap;
 
 import com.pbl.quantumleap.service.OpenAIService;
 import com.pbl.quantumleap.service.QuantumLeapService;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Git;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -88,32 +89,32 @@ public class Main implements Callable<Integer> {
   }
 
   // CI 환경용
-//  public static void main(String[] args) {
-//    int exitCode = new CommandLine(new Main()).execute(args);
-//    System.exit(exitCode);
-//  }
-
   public static void main(String[] args) {
-    // --- 로컬 IDE에서 바로 실행하기 위한 테스트용 설정 ---
-    System.err.println("!!! 로컬 테스트 모드로 실행합니다 !!!");
-
-    Main mainApp = new Main();
-
-    // picocli가 채워줘야 할 값들을 여기서 수동으로 설정합니다.
-    // TODO: 아래 경로를 실제 분석할 로컬 프로젝트 경로로 수정하세요.
-    mainApp.projectRoot = new File("/Users/junghyeon-u/work/Code/SKB-IPL-API");
-    // 분석하고 싶은 Git 변경 범위를 지정합니다. (예: 최근 1개 커밋)
-    mainApp.baseCommit = "HEAD~1";
-    mainApp.headCommit = "HEAD";
-
-    try {
-      // picocli의 execute() 대신, call() 메서드를 직접 호출하여 로직을 실행합니다.
-      mainApp.call();
-    } catch (Exception e) {
-      System.err.println("로컬 테스트 실행 중 오류 발생: " + e.getMessage());
-      e.printStackTrace();
-    }
-
+    int exitCode = new CommandLine(new Main()).execute(args);
+    System.exit(exitCode);
   }
+
+//  public static void main(String[] args) {
+//     --- 로컬 IDE에서 바로 실행하기 위한 테스트용 설정 ---
+//    System.err.println("!!! 로컬 테스트 모드로 실행합니다 !!!");
+//
+//    Main mainApp = new Main();
+//
+//     picocli가 채워줘야 할 값들을 여기서 수동으로 설정합니다.
+//     TODO: 아래 경로를 실제 분석할 로컬 프로젝트 경로로 수정하세요.
+//    mainApp.projectRoot = new File("/Users/junghyeon-u/work/Code/SKB-IPL-API");
+//     분석하고 싶은 Git 변경 범위를 지정합니다. (예: 최근 1개 커밋)
+//    mainApp.baseCommit = "HEAD~1";
+//    mainApp.headCommit = "HEAD";
+//
+//    try {
+//       picocli의 execute() 대신, call() 메서드를 직접 호출하여 로직을 실행합니다.
+//      mainApp.call();
+//    } catch (Exception e) {
+//      System.err.println("로컬 테스트 실행 중 오류 발생: " + e.getMessage());
+//      e.printStackTrace();
+//    }
+//
+//  }
 }
 
