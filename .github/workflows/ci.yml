@@ -3,7 +3,7 @@
 # ==============================================================================
 #
 # ## 목적 ##
-# 이 파일은 대상 프로젝트(예: SKB-IPL-API)의 CI 파이프라인에 QuantumLeap를 통합하여,
+# 이 파일은 대상 프로젝트의 CI 파이프라인에 QuantumLeap를 통합하여,
 # Pull Request 생성 시 자동으로 테스트를 최적화하는 방법을 안내합니다.
 #
 
@@ -53,6 +53,5 @@ jobs:
       - name: 5. Run QuantumLeap Analyzer (Proof of Concept)
         run: |
           echo "CI 환경에서 분석기를 실행합니다..."
-          # build/libs/ 폴더에 생성된 JAR 파일을 실행합니다.
-          # Main.java의 하드코딩된 경로 때문에 지금은 오류가 발생하지만, "QuantumLeap 분석기를 시작합니다!" 메시지가 출력되면 성공입니다.
+          # Main.java의 "QuantumLeap 분석기를 시작합니다!" 메시지가 출력되면 성공입니다.
           java -jar build/libs/QuantumLeap-0.0.1-SNAPSHOT.jar
