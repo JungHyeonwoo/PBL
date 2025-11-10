@@ -11,6 +11,7 @@ import com.pbl.quantumleap.model.DependencyGraph.ClassNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -71,8 +72,22 @@ public class QuantumLeapService {
 
     // 결과 리포팅 (HTML 생성)
     GraphVisualizer visualizer = new GraphVisualizer();
-    visualizer.generateInteractiveReport(dependencyGraph, changedClasses, testSelector.getImpactSet(), "build/reports/quantumleap");
+    Path projectRoot = Paths.get(projectPath).toAbsolutePath().normalize();
 
+    if (projectRoot.endsWith("java") || projectRoot.endsWith("src/main/java")) {
+      projectRoot = projectRoot.getParent().getParent().getParent(); // src/main/java → 루트로 이동
+    }
+
+    Path reportDir = projectRoot.resolve("build/reports/quantumleap");
+    System.err.println("📁 Report 저장 경로 (수정됨): " + reportDir.toString());
+
+    visualizer.generateInteractiveReport(
+        dependencyGraph,
+        changedClasses,
+        testSelector.getImpactSet(),
+        aiSuggestions,
+        reportDir.toString()
+    );
     // 최종 결과를 AnalysisResult 객체에 담아 반환 (AI 결과 포함)
     return new AnalysisResult(testsToRun, cycles, aiSuggestions);
   }
@@ -96,6 +111,14 @@ public class QuantumLeapService {
             3.  **불안정한 의존성:** 변경 가능성이 높은 모듈(예: 외부 API 연동)에 안정적인 핵심 도메인 모듈이 직접 의존하는 경우 위험할 수 있습니다. (추상화 원칙 위배 가능성)
 
             분석 결과는 마크다운 형식의 리스트로 간결하게 요약해주세요. 각 항목에는 관련된 클래스 이름을 명시하고, 문제점과 가능한 개선 방안을 간단히 제시해주세요. 심각한 문제가 없다면 "특별한 아키텍처 문제점은 발견되지 않았습니다." 라고 답변해주세요.
+            1. 문제점 제목
+                - 관련 클래스: ClassA, ClassB
+                - 설명: 문제점에 대한 간단한 설명
+                - 개선 방안: 제안하는 3줄이내 해결책
+            2. 문제점 제목
+                - 관련 클래스: ClassA, ClassB
+                - 설명: 문제점에 대한 간단한 설명
+                - 개선 방안: 제안하는 3줄이내 해결책
 
             분석 대상 JSON 데이터:
             ```json

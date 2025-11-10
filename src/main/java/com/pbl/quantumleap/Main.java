@@ -49,7 +49,6 @@ public class Main implements Callable<Integer> {
 
     if (changedClasses.isEmpty()) {
       System.err.println("분석할 Java 변경점이 없습니다. 테스트를 건너뜁니다.");
-      return 0;
     }
 
     // 2. 설정 파일 로드 및 경로 계산
@@ -79,6 +78,7 @@ public class Main implements Callable<Integer> {
           System.err.println("⚠️ 순환 참조 발견: " + String.join(" -> ", cycle))
       );
     }
+    System.err.println("AI 분석 결과: " + result.getAiArchitectureSuggestions());
 
     // 5. 최종 결과(테스트 목록)만 표준 출력(stdout)으로 출력합니다.
     if (!result.getTestsToRun().isEmpty()) {

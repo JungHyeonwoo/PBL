@@ -24,7 +24,7 @@ public class OpenAIService {
     this.openaiApiKey = System.getenv("OPENAI_API_KEY");
 
     if (this.openaiApiUrl == null || this.openaiApiKey == null) {
-      System.err.println("경고: 환경변수 OPENAI_API_URL 또는 OPENAI_API_KEY가 설정되지 않았습니다. AI 분석을 건너<0xEB><0x9A><0x81>니다.");
+      System.err.println("경고: 환경변수 OPENAI_API_URL 또는 OPENAI_API_KEY가 설정되지 않았습니다. AI 분석을 건너뜁니다.");
     }
 
     this.httpClient = HttpClient.newHttpClient();
