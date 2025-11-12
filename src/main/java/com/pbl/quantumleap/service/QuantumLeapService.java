@@ -68,7 +68,8 @@ public class QuantumLeapService {
     TestFinder testFinder = new TestFinder();
     Map<String, String> sourceToTestMap = testFinder.findTests(scanner.scan(testPath));
     TestSelector testSelector = new TestSelector(dependencyGraph, sourceToTestMap);
-    Set<String> testsToRun = testSelector.selectTests(changedClasses);
+    Map<String, List<String>> testsWithPaths = testSelector.selectTestsAndPaths(changedClasses);
+    Set<String> impactSet = testSelector.getImpactSet();
 
     // 결과 리포팅 (HTML 생성)
     GraphVisualizer visualizer = new GraphVisualizer();
@@ -84,12 +85,12 @@ public class QuantumLeapService {
     visualizer.generateInteractiveReport(
         dependencyGraph,
         changedClasses,
-        testSelector.getImpactSet(),
+        impactSet,
         aiSuggestions,
         reportDir.toString()
     );
     // 최종 결과를 AnalysisResult 객체에 담아 반환 (AI 결과 포함)
-    return new AnalysisResult(testsToRun, cycles, aiSuggestions);
+    return new AnalysisResult(cycles, aiSuggestions, testsWithPaths);
   }
 
   /**

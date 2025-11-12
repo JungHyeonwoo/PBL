@@ -2,6 +2,8 @@ package com.pbl.quantumleap;
 
 import com.pbl.quantumleap.service.OpenAIService;
 import com.pbl.quantumleap.service.QuantumLeapService;
+import java.util.List;
+import java.util.Map;
 import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Git;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -51,6 +53,11 @@ public class Main implements Callable<Integer> {
       System.err.println("분석할 Java 변경점이 없습니다. 테스트를 건너뜁니다.");
     }
 
+    System.err.println("\n========================================");
+    System.err.println(" 1. 변경된 파일 (Git Diff)");
+    System.err.println("========================================");
+    changedClasses.forEach(className -> System.err.println("- " + className));
+
     // 2. 설정 파일 로드 및 경로 계산
     ConfigLoader configLoader = new ConfigLoader();
     Configuration config = configLoader.loadConfig(projectRootPath);
@@ -67,6 +74,26 @@ public class Main implements Callable<Integer> {
     );
     AnalysisResult result = service.analyze(changedClasses);
 
+    System.err.println("\n========================================");
+    System.err.println(" 2. 지능형 테스트 선별 경로 (BFS 알고리즘)");
+    System.err.println("========================================");
+    Map<String, List<String>> testsWithPaths = result.getTestsWithPaths();
+    if (testsWithPaths.isEmpty()) {
+      System.err.println("✅ 변경 사항과 연관된 테스트를 찾지 못했습니다.");
+    } else {
+      System.err.println("다음과 같은 " + testsWithPaths.size() + "개의 테스트가 선별되었습니다:\n");
+      for (Map.Entry<String, List<String>> entry : testsWithPaths.entrySet()) {
+        String testClass = entry.getKey();
+        List<String> path = entry.getValue();
+        // 경로 출력: 예) [MemberService(변경됨)] → MemberController
+        String dependencyPath = path.stream()
+            .map(className -> changedClasses.contains(className) ? "[" + className + "(변경됨)]" : className)
+            .collect(Collectors.joining(" → "));
+
+        System.err.println("  ▶️ " + testClass + " (선별됨)");
+        System.err.println("    └─ 이유(경로): " + dependencyPath + "\n");
+      }
+    }
     // 4. 아키텍처 분석 결과를 로그(stderr)로 출력
     System.err.println("\n========================================");
     System.err.println(" 아키텍처 분석 결과 (규칙 기반)");
@@ -81,8 +108,8 @@ public class Main implements Callable<Integer> {
     System.err.println("AI 분석 결과: " + result.getAiArchitectureSuggestions());
 
     // 5. 최종 결과(테스트 목록)만 표준 출력(stdout)으로 출력합니다.
-    if (!result.getTestsToRun().isEmpty()) {
-      result.getTestsToRun().forEach(System.out::println);
+    if (!testsWithPaths.isEmpty()) {
+      testsWithPaths.forEach((key, value) -> System.out.println(key));
     }
 
     return 0; // 성공
@@ -95,26 +122,26 @@ public class Main implements Callable<Integer> {
   }
 
 //  public static void main(String[] args) {
-//     --- 로컬 IDE에서 바로 실행하기 위한 테스트용 설정 ---
+////     --- 로컬 IDE에서 바로 실행하기 위한 테스트용 설정 ---
 //    System.err.println("!!! 로컬 테스트 모드로 실행합니다 !!!");
 //
 //    Main mainApp = new Main();
 //
-//     picocli가 채워줘야 할 값들을 여기서 수동으로 설정합니다.
-//     TODO: 아래 경로를 실제 분석할 로컬 프로젝트 경로로 수정하세요.
+////     picocli가 채워줘야 할 값들을 여기서 수동으로 설정합니다.
+////     TODO: 아래 경로를 실제 분석할 로컬 프로젝트 경로로 수정하세요.
 //    mainApp.projectRoot = new File("/Users/junghyeon-u/work/Code/SKB-IPL-API");
-//     분석하고 싶은 Git 변경 범위를 지정합니다. (예: 최근 1개 커밋)
+////     분석하고 싶은 Git 변경 범위를 지정합니다. (예: 최근 1개 커밋)
 //    mainApp.baseCommit = "HEAD~1";
 //    mainApp.headCommit = "HEAD";
 //
 //    try {
-//       picocli의 execute() 대신, call() 메서드를 직접 호출하여 로직을 실행합니다.
+////       picocli의 execute() 대신, call() 메서드를 직접 호출하여 로직을 실행합니다.
 //      mainApp.call();
 //    } catch (Exception e) {
 //      System.err.println("로컬 테스트 실행 중 오류 발생: " + e.getMessage());
 //      e.printStackTrace();
 //    }
-//
+
 //  }
 }
 
