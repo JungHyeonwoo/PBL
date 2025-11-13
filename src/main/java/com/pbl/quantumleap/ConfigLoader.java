@@ -21,7 +21,7 @@ public class ConfigLoader {
     Path configPath = projectRootPath.resolve(CONFIG_FILE_NAME);
 
     if (Files.exists(configPath)) {
-      System.out.println("✅ 설정 파일(" + CONFIG_FILE_NAME + ")을 발견했습니다. 설정을 로드합니다.");
+      System.err.println("✅ 설정 파일(" + CONFIG_FILE_NAME + ")을 발견했습니다. 설정을 로드합니다.");
       ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
       try {
         return mapper.readValue(configPath.toFile(), Configuration.class);
@@ -29,7 +29,7 @@ public class ConfigLoader {
         System.err.println("⚠️ 설정 파일 읽기 오류! 기본 설정을 사용합니다. 오류: " + e.getMessage());
       }
     } else {
-      System.out.println("ℹ️ 설정 파일이 없습니다. 기본 설정을 사용합니다.");
+      System.err.println("ℹ️ 설정 파일이 없습니다. 기본 설정을 사용합니다.");
     }
 
     return new Configuration(); // 기본 설정 반환

@@ -94,7 +94,7 @@ public class GraphVisualizer {
       Path outputPath = Paths.get(outputDir, "interactive-report.html");
       Files.createDirectories(outputPath.getParent());
       Files.writeString(outputPath, htmlContent.toString());
-      System.out.println("✅ 통합 인터랙티브 리포트 HTML 파일이 생성되었습니다: " + outputPath);
+      System.err.println("✅ 통합 인터랙티브 리포트 HTML 파일이 생성되었습니다: " + outputPath);
     } catch (IOException e) {
       System.err.println("❌ HTML 파일 생성 중 오류가 발생했습니다: " + e.getMessage());
     }

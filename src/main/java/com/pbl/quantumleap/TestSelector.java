@@ -52,7 +52,6 @@ public class TestSelector {
     for (String impactedClass : this.impactSet) {
       String testClass = sourceToTestMap.get(impactedClass);
       if (testClass != null) {
-        // 이 테스트가 왜 선별되었는지 경로를 역추적합니다.
         List<String> path = buildPath(impactedClass);
         testsWithPaths.put(testClass, path);
       }

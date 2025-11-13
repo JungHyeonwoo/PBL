@@ -17,9 +17,6 @@ public class ArchitectureJsonExporter {
    * @param classesToExclude JSON 출력에서 제외할 클래스 이름 Set
    */
   public String getJsonString(DependencyGraph graph, Set<String> classesToExclude) {
-    System.out.println("\n========================================");
-    System.out.println(" 전체 아키텍처 구조 (JSON)");
-    System.out.println("========================================");
     ObjectMapper mapper = new ObjectMapper();
     ObjectNode rootNode = mapper.createObjectNode();
     ArrayNode classesArray = mapper.createArrayNode();

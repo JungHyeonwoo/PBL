@@ -109,7 +109,7 @@ public class Main implements Callable<Integer> {
 
     // 5. 최종 결과(테스트 목록)만 표준 출력(stdout)으로 출력합니다.
     if (!testsWithPaths.isEmpty()) {
-      testsWithPaths.forEach((key, value) -> System.out.println(key));
+      testsWithPaths.forEach((key, value) -> System.err.println(key));
     }
 
     return 0; // 성공

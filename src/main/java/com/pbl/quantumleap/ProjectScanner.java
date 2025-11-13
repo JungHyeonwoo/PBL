@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class ProjectScanner {
 
   public List<Path> scan(String rootDir) {
-    System.out.println("프로젝트 스캔 시작(대상 디렉토리 : " + rootDir + ")");
+    System.err.println("프로젝트 스캔 시작(대상 디렉토리 : " + rootDir + ")");
     Path startPath = Paths.get(rootDir);
 
     if (!Files.isDirectory(startPath)) {
@@ -26,7 +26,7 @@ public class ProjectScanner {
           .filter(path -> path.toString().endsWith(".java"))
           .collect(Collectors.toList());
 
-      System.out.println(javaFiles.size() + "개의 Java 파일을 찾았습니다.");
+      System.err.println(javaFiles.size() + "개의 Java 파일을 찾았습니다.");
       return javaFiles;
     } catch (IOException e) {
       System.err.println("프로젝트 스캔 중 오류가 발생했습니다: " + e.getMessage());

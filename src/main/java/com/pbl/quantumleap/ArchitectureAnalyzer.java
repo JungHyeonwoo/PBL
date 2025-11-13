@@ -26,14 +26,14 @@ public class ArchitectureAnalyzer {
    * @return 순환 참조 경로 목록 (e.g., [[A, B, C, A], [D, E, D]])
    */
   public List<List<String>> detectCircularDependencies() {
-    System.out.println("\n--- 아키텍처 건전성 분석 시작 ---");
+    System.err.println("\n--- 아키텍처 건전성 분석 시작 ---");
     for (ClassNode node : graph.getNodes().values()) {
       // 제외 목록에 포함된 클래스는 분석을 시작하지 않습니다.
       if (!visited.contains(node) && !classesToExclude.contains(node.getName())) {
         findCycles(node, new ArrayList<>());
       }
     }
-    System.out.println("✅ " + cycles.size() + "개의 순환 참조를 발견했습니다.");
+    System.err.println("✅ " + cycles.size() + "개의 순환 참조를 발견했습니다.");
     return cycles;
   }
 
